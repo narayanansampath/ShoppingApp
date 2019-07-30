@@ -1,16 +1,34 @@
 import 'package:flutter/material.dart';
 
-class Product extends StatelessWidget {
-  final List<String> product;
+import './pages/product.dart';
 
-  Product(this.product);
+class Product extends StatelessWidget {
+  final List<Map<String, String>> product;
+  final Function deleteProduct;
+
+  Product(this.product, {this.deleteProduct});
 
   Widget _buildProductItem(BuildContext context, int index) {
     return Card(
       child: Column(
         children: <Widget>[
-          Image.asset('assets/food.jpg'),
-          Text(product[index])
+          Image.asset(product[index]['image']),
+          Text(product[index]['title']),
+          ButtonBar(
+            alignment: MainAxisAlignment.center,
+            children: <Widget>[
+              FlatButton(
+                child: Text('Details'),
+                onPressed: () => Navigator.pushNamed<bool>(
+                        context, '/product/' + index.toString())
+                    .then((bool value) {
+                  if (value) {
+                    deleteProduct(index);
+                  }
+                }),
+              )
+            ],
+          )
         ],
       ),
     );
@@ -35,8 +53,6 @@ class Product extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return _buildProductList();
-
   }
 }
